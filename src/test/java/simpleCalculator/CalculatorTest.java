@@ -1,6 +1,7 @@
 package simpleCalculator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.*;
 
@@ -24,5 +25,19 @@ public class CalculatorTest {
 	@Test
 	public void addingmultipledelimiters() {
 		assertEquals(10, Calculator.Add("1,2\n3,4"));
+	}
+	
+	@Test
+	public void addingcustomdelimiters() {
+		assertEquals(10, Calculator.Add("//;\n1;2\n3,4"));
+	}
+	
+	@Test
+	public void givingnegativenumberasinput() {
+		try{
+			Calculator.Add("1,2,-3,4");
+		} catch(Exception ex) {
+			assertEquals("negatives not allowed : [-3]", ex.getMessage());
+		}
 	}
 }
