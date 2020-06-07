@@ -15,4 +15,9 @@ public class CalculatorTest {
 	public void singlenumbereturnnumber() {
 		assertEquals(1, Calculator.Add("1"));
 	}
+	
+	@Test
+	public void addingtwonumbers() {
+		assertEquals(3, Calculator.Add("1,2"));
+	}
 }
