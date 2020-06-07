@@ -20,4 +20,9 @@ public class CalculatorTest {
 	public void addingtwonumbers() {
 		assertEquals(3, Calculator.Add("1,2"));
 	}
+	
+	@Test
+	public void addingmultipledelimiters() {
+		assertEquals(10, Calculator.Add("1,2\n3,4"));
+	}
 }
