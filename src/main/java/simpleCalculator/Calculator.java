@@ -16,8 +16,8 @@ public class Calculator {
 			else if((number.contains(",") || number.contains("\n")) && !number.startsWith("//")) {
 				int sumOfNumbers = 0;
 				List<String> elements = new ArrayList<String>(Arrays.asList(number.split(",|\\n")));
-				customExceptionCheck(elements);
-				for(String element : elements)
+				List<String> newElements = customCheck(elements);
+				for(String element : newElements)
 					sumOfNumbers+=Integer.parseInt(element);
 				return sumOfNumbers;
 			}
@@ -27,28 +27,33 @@ public class Calculator {
 				int sumOfNumbers = 0;
 				List<String> elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+customDelimiter)));
 				elements.removeAll(Arrays.asList(""));
-				customExceptionCheck(elements);
-				for(String element : elements)
+				List<String> newElements = customCheck(elements);
+				for(String element : newElements)
 					sumOfNumbers+=Integer.parseInt(element);
 				return sumOfNumbers;
 			}
 			else {
 				return Integer.parseInt(number);
 			}
-		} catch (negativeNotAllowedException ex) {
+		} catch (Exception ex) {
 			System.out.println("Exception occured : " + ex.getMessage());
 		}
 		return 0;
 	}
 	
-	public static void customExceptionCheck(List<String> element) throws negativeNotAllowedException {
+	public static List<String> customCheck(List<String> element) throws negativeNotAllowedException {
 		List<String> negativeNumbers = new ArrayList<String>();
+		List<String> trimmedList = new ArrayList<String>();
 		for(String token : element) {
 			if(Integer.parseInt(token) < 0) {
 			negativeNumbers.add(token);
 			}
+			if(Integer.parseInt(token) < 1001) {
+				trimmedList.add(token);
+			}
 		}
 		if(!negativeNumbers.isEmpty())
 			throw new negativeNotAllowedException("negatives not allowed : " + negativeNumbers);
+		return trimmedList;
 	}
 }

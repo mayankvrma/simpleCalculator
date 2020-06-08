@@ -19,7 +19,7 @@ public class CalculatorTest {
 	
 	@Test
 	public void addingtwonumbers() {
-		assertEquals(3, Calculator.Add("1,2"));
+		assertEquals(3, Calculator.Add("2,1"));
 	}
 	
 	@Test
@@ -39,5 +39,10 @@ public class CalculatorTest {
 		} catch(Exception ex) {
 			assertEquals("negatives not allowed : [-3]", ex.getMessage());
 		}
+	}
+	
+	@Test
+	public void givinginputgreaterthan1000() {
+		assertEquals(6, Calculator.Add("//;\n1,2\n3;1005"));
 	}
 }
