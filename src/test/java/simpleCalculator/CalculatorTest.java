@@ -48,6 +48,6 @@ public class CalculatorTest {
 	
 	@Test
 	public void givingmultichardelimiter() {
-		assertEquals(6, Calculator.Add("//[;;;]\n1;;;2;;;3"));
+		assertEquals(6, Calculator.Add("//[***]\n1***2***3"));
 	}
 }

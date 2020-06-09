@@ -23,15 +23,16 @@ public class Calculator {
 			}
 			else if(number.startsWith("//")) {
 				List<String> elements = new ArrayList<String>();
-				String delimitingString = StringUtils.substringAfter(number, "//");
-				String customString = StringUtils.substringAfter(delimitingString, "\n");
+				String numbersWithDelimiter = StringUtils.substringAfter(number, "//");
+				String customString = StringUtils.substringAfter(numbersWithDelimiter, "\n");
 				int sumOfNumbers = 0;
-				if(delimitingString.contains("[")) {
-					String multiCharDelimiter = delimitingString.substring(delimitingString.indexOf("[")+1, delimitingString.indexOf("]"));
-					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+multiCharDelimiter)));
+				if(numbersWithDelimiter.contains("[")) {
+					String multiCharDelimiter = numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("[")+1, numbersWithDelimiter.indexOf("]"));
+					String metaEscapedString = escapingMetaChar(multiCharDelimiter);
+					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+metaEscapedString)));
 				}else {
-					Character customDelimiter = delimitingString.charAt(0);
-					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+customDelimiter)));
+					Character customDelimiter = numbersWithDelimiter.charAt(0);
+					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|\\"+customDelimiter)));
 				}
 				List<String> newElements = customCheck(elements);
 				for(String element : newElements)
@@ -47,6 +48,21 @@ public class Calculator {
 		return 0;
 	}
 	
+	private static String escapingMetaChar(String multiCharDelimiter) {
+		StringBuilder str = new StringBuilder();
+		char[] delimiters = multiCharDelimiter.toCharArray();
+		char[] escapedDelimiters = new char[2*delimiters.length];
+		for(int i=0;i<escapedDelimiters.length;i++) {
+			if(i%2 != 0)
+				escapedDelimiters[i] = delimiters[(i-1)/2];
+			else
+				escapedDelimiters[i] = '\\';
+			str.append(escapedDelimiters[i]);
+		}
+		
+		return str.toString();
+	}
+
 	public static List<String> customCheck(List<String> element) throws negativeNotAllowedException {
 		List<String> negativeNumbers = new ArrayList<String>();
 		List<String> trimmedList = new ArrayList<String>();
