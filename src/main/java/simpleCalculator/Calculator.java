@@ -22,11 +22,17 @@ public class Calculator {
 				return sumOfNumbers;
 			}
 			else if(number.startsWith("//")) {
-				String customString = StringUtils.substringAfter(number, "//");
-				Character customDelimiter = customString.charAt(0); 
+				List<String> elements = new ArrayList<String>();
+				String delimitingString = StringUtils.substringAfter(number, "//");
+				String customString = StringUtils.substringAfter(delimitingString, "\n");
 				int sumOfNumbers = 0;
-				List<String> elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+customDelimiter)));
-				elements.removeAll(Arrays.asList(""));
+				if(delimitingString.contains("[")) {
+					String multiCharDelimiter = delimitingString.substring(delimitingString.indexOf("[")+1, delimitingString.indexOf("]"));
+					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+multiCharDelimiter)));
+				}else {
+					Character customDelimiter = delimitingString.charAt(0);
+					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+customDelimiter)));
+				}
 				List<String> newElements = customCheck(elements);
 				for(String element : newElements)
 					sumOfNumbers+=Integer.parseInt(element);

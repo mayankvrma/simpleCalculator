@@ -45,4 +45,9 @@ public class CalculatorTest {
 	public void givinginputgreaterthan1000() {
 		assertEquals(6, Calculator.Add("//;\n1,2\n3;1005"));
 	}
+	
+	@Test
+	public void givingmultichardelimiter() {
+		assertEquals(6, Calculator.Add("//[;;;]\n1;;;2;;;3"));
+	}
 }
