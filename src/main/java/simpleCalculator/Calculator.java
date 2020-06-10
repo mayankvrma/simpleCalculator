@@ -27,9 +27,14 @@ public class Calculator {
 				String customString = StringUtils.substringAfter(numbersWithDelimiter, "\n");
 				int sumOfNumbers = 0;
 				if(numbersWithDelimiter.contains("[")) {
-					String multiCharDelimiter = numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("[")+1, numbersWithDelimiter.indexOf("]"));
-					String metaEscapedString = escapingMetaChar(multiCharDelimiter);
-					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+metaEscapedString)));
+					if(StringUtils.countMatches(numbersWithDelimiter, "[") > 1) {
+						String multiDelimiters = resolvingDelimiters(numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("["), numbersWithDelimiter.lastIndexOf("]")+1));
+						elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+multiDelimiters.substring(0, multiDelimiters.length()-1))));
+					}else {
+						String multiCharDelimiter = numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("[")+1, numbersWithDelimiter.indexOf("]"));
+						String metaEscapedString = escapingMetaChar(multiCharDelimiter);
+						elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+metaEscapedString)));
+					}
 				}else {
 					Character customDelimiter = numbersWithDelimiter.charAt(0);
 					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|\\"+customDelimiter)));
@@ -47,7 +52,24 @@ public class Calculator {
 		}
 		return 0;
 	}
-	
+
+	private static String resolvingDelimiters(String multiDelimiter) {
+		StringBuilder delimiterStr = new StringBuilder();
+		for(int i=0;i<multiDelimiter.length();i++) {
+			if(multiDelimiter.charAt(i) == '[') {
+				StringBuilder str = new StringBuilder();
+				while(multiDelimiter.charAt(i+1) != ']') {
+					i++;
+					str.append(multiDelimiter.charAt(i));
+				}
+				String escapedStr = escapingMetaChar(str.toString());
+				delimiterStr.append(escapedStr.concat("|"));
+				i++;
+			}
+		}
+		return delimiterStr.toString();
+	}
+
 	private static String escapingMetaChar(String multiCharDelimiter) {
 		StringBuilder str = new StringBuilder();
 		char[] delimiters = multiCharDelimiter.toCharArray();
@@ -63,7 +85,7 @@ public class Calculator {
 		return str.toString();
 	}
 
-	public static List<String> customCheck(List<String> element) throws negativeNotAllowedException {
+	private static List<String> customCheck(List<String> element) throws negativeNotAllowedException {
 		List<String> negativeNumbers = new ArrayList<String>();
 		List<String> trimmedList = new ArrayList<String>();
 		for(String token : element) {

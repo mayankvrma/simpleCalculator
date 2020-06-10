@@ -1,7 +1,6 @@
 package simpleCalculator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.*;
 
@@ -49,5 +48,10 @@ public class CalculatorTest {
 	@Test
 	public void givingmultichardelimiter() {
 		assertEquals(6, Calculator.Add("//[***]\n1***2***3"));
+	}
+	
+	@Test
+	public void givingmultidelimiter() {
+		assertEquals(6, Calculator.Add("//[***][;;]\n1***2;;3"));
 	}
 }
