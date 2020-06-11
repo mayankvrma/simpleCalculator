@@ -32,7 +32,7 @@ public class Calculator {
 				return sumOfNumbers;
 			} else
 				return Integer.parseInt(number);
-		}catch(Exception ex) {
+		}catch(negativeNotAllowedException ex) {
 			System.out.println("Exception occured : " + ex.getMessage());
 		}
 		return 0;
@@ -62,7 +62,7 @@ public class Calculator {
 			for(String element : newElements)
 				sumOfNumbers+=Integer.parseInt(element);
 			return sumOfNumbers;
-		}catch(Exception ex) {
+		}catch(negativeNotAllowedException ex) {
 			System.out.println("Exception occured : " + ex.getMessage());
 		}
 		return 0;
