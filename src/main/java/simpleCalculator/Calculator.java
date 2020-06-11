@@ -5,16 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
- 
+
 public class Calculator {
 
 	public static int Add(String number) {
-		try{
+		int sum = checkKindOfString(number);
+		return sum;
+	}
+
+	private static int checkKindOfString(String number) {
+		// TODO Auto-generated method stub
+		try {
+			int sumOfNumbers = 0;
 			if(number.equals(null) || number.trim().isEmpty()) {
-		    return 0;
+				return 0;
 			}
 			else if((number.contains(",") || number.contains("\n")) && !number.startsWith("//")) {
-				int sumOfNumbers = 0;
 				List<String> elements = new ArrayList<String>(Arrays.asList(number.split(",|\\n")));
 				List<String> newElements = customCheck(elements);
 				for(String element : newElements)
@@ -22,32 +28,41 @@ public class Calculator {
 				return sumOfNumbers;
 			}
 			else if(number.startsWith("//")) {
-				List<String> elements = new ArrayList<String>();
-				String numbersWithDelimiter = StringUtils.substringAfter(number, "//");
-				String customString = StringUtils.substringAfter(numbersWithDelimiter, "\n");
-				int sumOfNumbers = 0;
-				if(numbersWithDelimiter.contains("[")) {
-					if(StringUtils.countMatches(numbersWithDelimiter, "[") > 1) {
-						String multiDelimiters = resolvingDelimiters(numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("["), numbersWithDelimiter.lastIndexOf("]")+1));
-						elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+multiDelimiters.substring(0, multiDelimiters.length()-1))));
-					}else {
-						String multiCharDelimiter = numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("[")+1, numbersWithDelimiter.indexOf("]"));
-						String metaEscapedString = escapingMetaChar(multiCharDelimiter);
-						elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+metaEscapedString)));
-					}
-				}else {
-					Character customDelimiter = numbersWithDelimiter.charAt(0);
-					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|\\"+customDelimiter)));
-				}
-				List<String> newElements = customCheck(elements);
-				for(String element : newElements)
-					sumOfNumbers+=Integer.parseInt(element);
+				sumOfNumbers = customisedDelimiters(number);
 				return sumOfNumbers;
-			}
-			else {
+			} else
 				return Integer.parseInt(number);
+		}catch(Exception ex) {
+			System.out.println("Exception occured : " + ex.getMessage());
+		}
+		return 0;
+	}
+	
+	private static int customisedDelimiters(String number) {
+		// TODO Auto-generated method stub
+		try {
+			List<String> elements = new ArrayList<String>();
+			String numbersWithDelimiter = StringUtils.substringAfter(number, "//");
+			String customString = StringUtils.substringAfter(numbersWithDelimiter, "\n");
+			int sumOfNumbers = 0;
+			if(numbersWithDelimiter.contains("[")) {
+				if(StringUtils.countMatches(numbersWithDelimiter, "[") > 1) {
+					String multiDelimiters = resolvingDelimiters(numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("["), numbersWithDelimiter.lastIndexOf("]")+1));
+					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+multiDelimiters.substring(0, multiDelimiters.length()-1))));
+				}else {
+					String multiCharDelimiter = numbersWithDelimiter.substring(numbersWithDelimiter.indexOf("[")+1, numbersWithDelimiter.indexOf("]"));
+					String metaEscapedString = escapingMetaChar(multiCharDelimiter);
+					elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|"+metaEscapedString)));
+				}
+			}else {
+				Character customDelimiter = numbersWithDelimiter.charAt(0);
+				elements = new ArrayList<String>(Arrays.asList(customString.split(",|\\n|\\"+customDelimiter)));
 			}
-		} catch (Exception ex) {
+			List<String> newElements = customCheck(elements);
+			for(String element : newElements)
+				sumOfNumbers+=Integer.parseInt(element);
+			return sumOfNumbers;
+		}catch(Exception ex) {
 			System.out.println("Exception occured : " + ex.getMessage());
 		}
 		return 0;

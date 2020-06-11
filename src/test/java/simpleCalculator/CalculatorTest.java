@@ -34,9 +34,9 @@ public class CalculatorTest {
 	@Test
 	public void givingnegativenumberasinput() {
 		try{
-			Calculator.Add("1,2,-3,4");
+			Calculator.Add("1,-2,-3,4");
 		} catch(Exception ex) {
-			assertEquals("negatives not allowed : [-3]", ex.getMessage());
+			assertEquals("negatives not allowed : [-2,-3]", ex.getMessage());
 		}
 	}
 	
@@ -52,6 +52,6 @@ public class CalculatorTest {
 	
 	@Test
 	public void givingmultidelimiter() {
-		assertEquals(6, Calculator.Add("//[***][;;]\n1***2;;3"));
+		assertEquals(10, Calculator.Add("//[***][;;][!!!!]\n1***2;;3!!!!4"));
 	}
 }
